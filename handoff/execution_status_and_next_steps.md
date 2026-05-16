@@ -6,7 +6,7 @@ Date: 2026-05-16
 
 Created lean paper/demo package:
 
-`C:\Users\atsak\Downloads\ad-worktree\foi-projects-roots\foi-outreach-app\logic-drift-paper-demo`
+`C:\Users\atsak\Downloads\ad-worktree\foi-projects-roots\foi-outreach-app\logic-drift-protocol`
 
 Included:
 
@@ -38,7 +38,7 @@ The analysis script reports:
 Run command:
 
 ```powershell
-python .\logic-drift-paper-demo\scripts\analyze_logic_drift.py
+python .\scripts\analyze_logic_drift.py
 ```
 
 ## Key Paper Correction
@@ -97,4 +97,3 @@ Keep out:
 - Kuhn/Lakatos deconstruction as central frame.
 - Strong causal claims about RLHF.
 - Broad consciousness/metaphysics advocacy.
-

@@ -4,7 +4,7 @@
 
 Use this folder as the base of a Git repository:
 
-`logic-drift-paper-demo`
+`logic-drift-protocol`
 
 Recommended first public/private repo name:
 
@@ -67,4 +67,3 @@ Suggested split:
 - Paper/text/data: CC BY 4.0.
 
 If unsure, leave the repository private until the license choice is finalized.
-

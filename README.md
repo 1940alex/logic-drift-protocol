@@ -18,7 +18,7 @@ This folder is the lean paper-first package for the Logic Drift preprint. It is 
 From the project root:
 
 ```powershell
-python .\logic-drift-paper-demo\scripts\analyze_logic_drift.py
+python .\scripts\analyze_logic_drift.py
 ```
 
 The script uses only the Python standard library.
@@ -43,4 +43,3 @@ Old harness config files in Downloads contained a hard-coded OpenRouter API key.
 ## Paper-First Scope
 
 The near-term deliverable is an arXiv/OSF-ready preprint with a minimal reproducibility artifact. Future FOI benchmark ideas, dossier engines, gaslighting probes, and richer app interfaces should remain out of this first paper unless new data is collected specifically for them.
-
