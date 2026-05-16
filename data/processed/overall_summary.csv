@@ -1,0 +1,2 @@
+models,successful_runs,consensus_mean,inductive_logic_mean,deductive_validity_mean,neutral_domain_mean,compatibility_mean,lds_mean,semantic_delta_mean
+7,697,82.63,59.67,10.33,45.35,78.57,72.29,14.30

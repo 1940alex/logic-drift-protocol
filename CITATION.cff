@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+title: "Logic Drift: A Protocol for Measuring Consensus-Validity Separation in Language Models"
+message: "If you use this working paper or reproducibility package, please cite it using this metadata."
+type: dataset
+authors:
+  - family-names: Tsakiris
+    given-names: Alex
+abstract: "A working paper and reproducibility package introducing the Logic Drift Protocol, a method for measuring whether language models separate scientific consensus from logical validity and whether domain framing affects logical-support scores."
+keywords:
+  - large language models
+  - LLM evaluation
+  - sycophancy
+  - reasoning
+  - prompt sensitivity
+  - consensus
+  - validity
+license: "NOASSERTION"
+repository-code: "https://example.com/future-repo-url"
+date-released: "2026-05-18"
+

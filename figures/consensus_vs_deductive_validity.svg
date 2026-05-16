@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="620" viewBox="0 0 1120 620">
+<rect width="100%" height="100%" fill="white"/>
+<text x="90" y="38" font-family="Arial" font-size="24" font-weight="700">Consensus vs. Deductive Validity by Model</text>
+<line x1="90" y1="470" x2="1080" y2="470" stroke="#222" stroke-width="1"/>
+<line x1="90" y1="70" x2="90" y2="470" stroke="#222" stroke-width="1"/>
+<line x1="85" y1="470.0" x2="1080" y2="470.0" stroke="#e5e5e5" stroke-width="1"/>
+<text x="78" y="474.0" text-anchor="end" font-family="Arial" font-size="13" fill="#444">0</text>
+<line x1="85" y1="390.0" x2="1080" y2="390.0" stroke="#e5e5e5" stroke-width="1"/>
+<text x="78" y="394.0" text-anchor="end" font-family="Arial" font-size="13" fill="#444">20</text>
+<line x1="85" y1="310.0" x2="1080" y2="310.0" stroke="#e5e5e5" stroke-width="1"/>
+<text x="78" y="314.0" text-anchor="end" font-family="Arial" font-size="13" fill="#444">40</text>
+<line x1="85" y1="230.0" x2="1080" y2="230.0" stroke="#e5e5e5" stroke-width="1"/>
+<text x="78" y="234.0" text-anchor="end" font-family="Arial" font-size="13" fill="#444">60</text>
+<line x1="85" y1="150.0" x2="1080" y2="150.0" stroke="#e5e5e5" stroke-width="1"/>
+<text x="78" y="154.0" text-anchor="end" font-family="Arial" font-size="13" fill="#444">80</text>
+<line x1="85" y1="70.0" x2="1080" y2="70.0" stroke="#e5e5e5" stroke-width="1"/>
+<text x="78" y="74.0" text-anchor="end" font-family="Arial" font-size="13" fill="#444">100</text>
+<rect x="104.0" y="138.6" width="52.7" height="331.4" fill="#4C78A8"/>
+<text x="130.4" y="133.6" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">82.8</text>
+<rect x="164.7" y="447.8" width="52.7" height="22.2" fill="#F58518"/>
+<text x="191.1" y="442.8" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">5.5</text>
+<text x="160.7" y="538" text-anchor="end" transform="rotate(-35 160.7,538)" font-family="Arial" font-size="13" fill="#222">claude opus 4.5</text>
+<rect x="245.4" y="153.2" width="52.7" height="316.8" fill="#4C78A8"/>
+<text x="271.8" y="148.2" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">79.2</text>
+<rect x="306.1" y="399.4" width="52.7" height="70.6" fill="#F58518"/>
+<text x="332.5" y="394.4" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">17.6</text>
+<text x="302.1" y="538" text-anchor="end" transform="rotate(-35 302.1,538)" font-family="Arial" font-size="13" fill="#222">deepseek v3.2</text>
+<rect x="386.9" y="101.3" width="52.7" height="368.7" fill="#4C78A8"/>
+<text x="413.2" y="96.3" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">92.2</text>
+<rect x="447.6" y="450.6" width="52.7" height="19.4" fill="#F58518"/>
+<text x="473.9" y="445.6" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">4.8</text>
+<text x="443.6" y="538" text-anchor="end" transform="rotate(-35 443.6,538)" font-family="Arial" font-size="13" fill="#222">gemini 3 pro</text>
+<rect x="528.3" y="136.9" width="52.7" height="333.1" fill="#4C78A8"/>
+<text x="554.6" y="131.9" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">83.3</text>
+<rect x="589.0" y="392.3" width="52.7" height="77.7" fill="#F58518"/>
+<text x="615.4" y="387.3" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">19.4</text>
+<text x="585.0" y="538" text-anchor="end" transform="rotate(-35 585.0,538)" font-family="Arial" font-size="13" fill="#222">gpt 4</text>
+<rect x="669.7" y="133.8" width="52.7" height="336.2" fill="#4C78A8"/>
+<text x="696.1" y="128.8" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">84.1</text>
+<rect x="730.4" y="438.0" width="52.7" height="32.0" fill="#F58518"/>
+<text x="756.8" y="433.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">8.0</text>
+<text x="726.4" y="538" text-anchor="end" transform="rotate(-35 726.4,538)" font-family="Arial" font-size="13" fill="#222">gpt 5.1</text>
+<rect x="811.1" y="148.4" width="52.7" height="321.6" fill="#4C78A8"/>
+<text x="837.5" y="143.4" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">80.4</text>
+<rect x="871.9" y="451.0" width="52.7" height="19.0" fill="#F58518"/>
+<text x="898.2" y="446.0" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">4.7</text>
+<text x="867.9" y="538" text-anchor="end" transform="rotate(-35 867.9,538)" font-family="Arial" font-size="13" fill="#222">grok 4.1 fast</text>
+<rect x="952.6" y="164.2" width="52.7" height="305.8" fill="#4C78A8"/>
+<text x="978.9" y="159.2" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">76.5</text>
+<rect x="1013.3" y="421.6" width="52.7" height="48.4" fill="#F58518"/>
+<text x="1039.6" y="416.6" text-anchor="middle" font-family="Arial" font-size="11" fill="#333">12.1</text>
+<text x="1009.3" y="538" text-anchor="end" transform="rotate(-35 1009.3,538)" font-family="Arial" font-size="13" fill="#222">o3</text>
+<rect x="90" y="579" width="16" height="16" fill="#4C78A8"/>
+<text x="114" y="592" font-family="Arial" font-size="14" fill="#222">Consensus score</text>
+<rect x="330" y="579" width="16" height="16" fill="#F58518"/>
+<text x="354" y="592" font-family="Arial" font-size="14" fill="#222">Deductive validity score</text>
+</svg>
