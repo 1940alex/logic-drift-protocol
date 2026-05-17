@@ -1,11 +1,14 @@
 cff-version: 1.2.0
-title: "Logic Drift: A Protocol for Measuring Consensus-Validity Separation in Language Models"
+title: "Logic Drift: An Initial Protocol for Probing Consensus-Validity Separation in Language Models"
 message: "If you use this working paper or reproducibility package, please cite it using this metadata."
 type: dataset
+version: "0.1.0"
 authors:
   - family-names: Tsakiris
     given-names: Alex
-abstract: "A working paper and reproducibility package introducing the Logic Drift Protocol, a method for measuring whether language models separate scientific consensus from logical validity and whether domain framing affects logical-support scores."
+    affiliation: "Future of Inquiry Institute"
+    email: alex.futureofinquiry@gmail.com
+abstract: "A working paper and reproducibility package introducing the Logic Drift Protocol, a compact evaluation method that asks language models to score a fixed inference from multiple angles (consensus, inductive support, deductive validity, neutral-domain structural twin). Reports initial behavioral results from 697 successful runs across seven frontier models on a single consciousness-related test case, with paired confidence intervals and within-run effect sizes."
 keywords:
   - large language models
   - LLM evaluation
@@ -14,6 +17,11 @@ keywords:
   - prompt sensitivity
   - consensus
   - validity
+  - philosophy of mind
 license: "CC-BY-4.0"
 repository-code: "https://github.com/1940alex/logic-drift-protocol"
 date-released: "2026-05-17"
+# Identifiers section will be populated when the Zenodo DOI is minted on v0.1.0 release.
+# identifiers:
+#   - type: doi
+#     value: "10.5281/zenodo.XXXXXXX"

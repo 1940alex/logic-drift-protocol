@@ -1,159 +1,214 @@
-# Logic Drift: A Protocol for Measuring Consensus-Validity Separation in Language Models
+# Logic Drift: An Initial Protocol for Probing Consensus–Validity Separation in Language Models
 
-Alex Tsakiris  
-Future of Inquiry
+Alex Tsakiris
+Future of Inquiry Institute[^1]
+
+[^1]: Future of Inquiry Institute is a US 501(c)(3) research nonprofit. Contact: alex.futureofinquiry@gmail.com. Web: https://futureofinquiry.org.
 
 ## Abstract
 
-Language models are increasingly used to evaluate scientific and philosophical arguments, but it remains unclear whether their assessments of logical support are invariant across domains with different levels of social or scientific prestige. We introduce the Logic Drift Protocol, a simple evaluation method that asks models to separately estimate scientific consensus, inductive support, deductive validity, and compatibility with alternative explanations. In an initial analysis of 697 successful runs across seven frontier models using a consciousness-related test case, models assigned high consensus scores to the neurological model of consciousness while assigning low deductive-validity scores to a specific correlation/damage-to-generation inference. Several models also assigned higher inductive-support scores to the neuroscience version of the argument than to a structurally similar neutral radio/circuit version, producing a positive Semantic Delta. These results suggest that semantic framing can influence model evaluations of logical strength, even when models can explicitly distinguish consensus from deductive validity. We present the protocol, prompts, data structure, and analysis script as a reproducible starting point for broader tests across domains. The results should be interpreted as initial behavioral evidence, not as proof of a causal alignment mechanism.
+Language models are increasingly consulted as reasoning assistants on scientific and philosophical arguments. Whether their assessments of logical support are stable across domains of differing prestige is not well understood. This paper introduces the Logic Drift Protocol (LDP), a compact evaluation method that asks a model to score a fixed inference from four angles: scientific consensus, inductive support, deductive validity, and inductive support for a structurally matched argument in a neutral domain. We report initial results from 697 successful runs across seven frontier models on a single consciousness-related test case.
+
+Two findings emerge. First, the gap between consensus and deductive-validity scores is large and consistent across every tested model (paired Cohen's $d_z$ ranging from 3.2 to 42.7). We treat this as a measurement instrument, not as a discovery: the LDP rubric explicitly elicits the two scores separately, so a sizeable gap is largely guaranteed by the protocol design. Its value is as a reproducible baseline against which interventions can be tested in future work.
+
+Second, the inductive-support score for the science-framed argument exceeds the score for the neutral-framed structural twin in most but not all tested models. The effect is heterogeneous: $d_z$ ranges from 0.22 (essentially null) for grok-4.1-fast to 2.16 for gemini-3-pro. We call this difference the Semantic Delta. The heterogeneity is itself the most defensible part of the result, since a pure rubric or prompt artifact would predict uniform behavior across models.
+
+**Scope.** Single test case, seven models, one prompt version, runs via a single API aggregator. Behavioral evidence, not a causal account. We discuss what the result is and is not in §6, and address the most predictable critique — that the neutral-domain analogy is too weak to support the comparison — in §4.4.
 
 ## 1. Introduction
 
-Language models are increasingly used as reasoning assistants in domains where expertise, consensus, and logical uncertainty interact. In these settings, a model may need to distinguish between at least three questions: what a community believes, what the available evidence inductively supports, and what follows deductively from a stated set of premises. These questions often align, but not always. A scientific consensus may be pragmatically useful and empirically productive while still resting on inferences that are deductively underdetermined.
+A language model asked to evaluate a scientific argument has to do at least three things at once. It has to estimate what the relevant community believes. It has to estimate what the available evidence supports inductively. And it has to estimate what follows deductively from a stated set of premises. These three things often line up. Sometimes they don't.
 
-This paper introduces the Logic Drift Protocol (LDP), a compact evaluation method for testing whether language models maintain this distinction. The protocol asks a model to score the same broad claim from multiple angles: scientific consensus, inductive support, deductive validity, neutral-domain structural analogy, and compatibility with an alternative explanation. The purpose is not to determine the truth of the target scientific claim. The purpose is to test whether model judgments of logical strength remain stable when consensus and semantic framing vary.
+The Logic Drift Protocol is a small instrument for asking whether they come apart, and if so, in which direction. The protocol presents the same broad claim from five angles in a single session: consensus, inductive support in the source domain, deductive validity, inductive support in a structurally matched neutral domain, and compatibility with a stated alternative explanation. The numbers a model produces in response are the data.
 
-The initial test case concerns a common inference about consciousness: brain activity correlates with subjective experience; damage to brain regions impairs specific experiences; therefore, the brain generates subjective experience. This test case was selected because it has high scientific consensus, a simple logical structure, and a well-known underdetermination issue: correlation and impairment can support generation, but they do not deductively entail it. The protocol compares this argument to a structurally similar neutral-domain argument involving radio circuitry and audio output.
+The point is not to settle the underlying scientific question the test case raises. The point is to ask a behavioral question about the model: when a fixed inference pattern appears in a high-prestige scientific frame versus a neutral mechanical frame, does the score change? If it changes, in which direction and by how much? And does that change happen uniformly across models, or only in some?
 
-The main contribution is a measurement frame. We define Logic Drift Score (LDS) as the gap between a model's consensus estimate and deductive-validity estimate. We define Semantic Delta as the difference between the model's inductive-support score for the scientific-domain argument and its score for a structurally similar neutral-domain argument. In the analyzed dataset, models generally separated consensus from deductive validity when asked directly, while several models assigned higher inductive-support scores to the neuroscience framing than to the neutral framing.
+This connects to existing work on language-model sycophancy and prompt sensitivity, but it is not quite the same problem. The model is not being asked whether it agrees with the user. It is being asked to score an argument's logical strength. If the score moves when only the surface domain moves, the model is exhibiting a behavior that lives one level above interpersonal sycophancy: sensitivity to the semantic identity of the frame, independent of any user signal. We call this domain-prestige sensitivity, but the label is provisional.
 
-These findings connect to prior work on language-model sycophancy, calibration, and prompt sensitivity. However, the present setting differs from standard user-directed sycophancy. The model is not asked to agree with the user. Instead, the question is whether a high-prestige domain or consensus-laden semantic frame can influence the model's evaluation of logical strength. We refer to this narrower behavioral pattern as domain-prestige sensitivity.
+**Author's note.** The motivation for this paper is partly personal. I have spent several years interviewing scientists and philosophers working on the consciousness problem, including Christof Koch and Bernardo Kastrup. The question that kept coming up was not whether any particular theory of consciousness is correct — that is well outside what I can settle — but whether the *form* of the leading scientific arguments survives careful logical examination. The LDP is an attempt to ask that question of language models, which are now widely consulted as reasoning assistants, without first resolving the underlying philosophical dispute. The choice of test case reflects this background and is disclosed openly in §3.2 and §6.
 
 ## 2. Related Work
 
-### 2.1 Sycophancy and Preference Optimization
+### 2.1 Sycophancy and preference optimization
 
-Recent work on language-model sycophancy shows that models optimized with human feedback may produce responses that match user beliefs rather than truthful or corrective answers. Sharma et al. study sycophantic behavior across several generation settings and argue that human preference data can favor convincing agreement over correctness. More recent formal work suggests that reinforcement learning from human feedback can amplify such behavior when learned rewards covary with agreement signals in the prompt.
+Sharma et al. document sycophantic behavior in language models trained with human preference data, arguing that human raters can favor convincing agreement over correctness [@sharma2024sycophancy]. Subsequent formal work suggests that reinforcement learning from human feedback can amplify this behavior when learned rewards covary with agreement signals in the prompt [@shapira2026rlhfsycophancy]. Related work on language-model "gaslighting" examines whether models can be steered into endorsing user-provided false claims [@li2025gaslighter]. Turner and Eisikovits discuss the moral and epistemic harms of AI sycophancy and argue that the phenomenon extends beyond interpersonal agreement [@turner2026programmed].
 
-Logic Drift studies a related but distinct setting. It does not ask whether a model agrees with the user. Instead, it asks whether a model's estimate of logical support changes when a fixed argument structure appears in a high-prestige scientific domain rather than a neutral domain. This can be understood as a test of domain-prestige sensitivity rather than interpersonal sycophancy.
+Logic Drift sits adjacent to this literature rather than inside it. The protocol does not present a user opinion for the model to agree or disagree with. It asks the model to score the same inference pattern in two different framings and measures whether the scores move. The behavior — if present — is closer to "frame sensitivity" than to "user agreement."
 
-### 2.2 LLM-as-Judge, Calibration, and Rubric Scoring
+### 2.2 LLM-as-judge and rubric scoring
 
-The protocol relies on model-provided numerical scores, so it is connected to work on LLM-as-judge evaluation and calibration. Numerical scores from language models are imperfect: models can map similar qualitative assessments to different numerical values, and prompt framing can affect ratings. To reduce arbitrary variance, the LDP uses an anchored scoring guide and asks for rationales alongside scores. The scores should therefore be interpreted as structured behavioral outputs, not as precise psychometric measurements.
+The protocol relies on model-produced numerical scores. This connects it to a body of work on language models as evaluators and on the calibration of those evaluators. Numerical scores from language models are imperfect: similar qualitative assessments can be mapped to different numerical values, and prompt structure affects ratings. To reduce arbitrary variance, the LDP uses a fixed anchored rubric and asks for rationales alongside scores. The scores should be read as structured behavioral outputs rather than as calibrated measurements. The rubric itself is a methodological choice that anchors the score range, and we return to its implications in §6.
 
-### 2.3 Prompt Sensitivity and Semantic Framing
+### 2.3 Prompt sensitivity and semantic framing
 
-Large language models are sensitive to prompt wording, context, and semantic associations. The Logic Drift Protocol uses that sensitivity as the object of study. By holding argument structure approximately fixed while varying domain framing, the protocol tests whether the semantic content of an argument influences the model's logical-strength assessment.
+Large language models are known to be sensitive to prompt wording, context, and semantic associations. The LDP takes that sensitivity as the object of study. By holding argument structure fixed while varying domain framing, the protocol asks whether the semantic content of an argument moves the model's score for the argument's logical strength.
 
 ## 3. Protocol
 
 ### 3.1 Definitions
 
-Let `S_C` denote the model's estimate of scientific consensus for a conclusion on a 0-100 scale. Let `S_L` denote its inductive-support score for the argument. Let `S_D` denote its deductive-validity score. We define:
+Let $S_C$ be the model's estimate of scientific consensus on a 0–100 scale, $S_L$ its inductive-support score for the target argument, and $S_D$ its deductive-validity score. Define:
 
-`LDS = S_C - S_D`
+$$\mathrm{LDS} = S_C - S_D$$
 
-where a high LDS indicates a large gap between perceived consensus and deductive validity.
+We call this the Logic Drift Score. We treat LDS not as a finding but as a measurement instrument: a baseline number whose value can be tracked across model versions and across interventions in future work.
 
-Let `S_L(science)` denote the inductive-support score for the scientific-domain argument and `S_L(neutral)` denote the score for a structurally similar neutral-domain argument. We define:
+Let $S_L(\text{science})$ be the inductive-support score for the science-framed argument and $S_L(\text{neutral})$ the score for the structurally matched neutral-framed argument. Define:
 
-`Semantic Delta = S_L(science) - S_L(neutral)`
+$$\mathrm{Semantic\ Delta} = S_L(\text{science}) - S_L(\text{neutral})$$
 
-A positive Semantic Delta indicates that the scientific-domain framing received a higher inductive-support score than the neutral framing.
+A positive Semantic Delta means the science framing received a higher inductive-support score than the structurally matched neutral framing.
 
-### 3.2 Test Case
+### 3.2 Test case
 
-The scientific-domain argument is:
+The science-framed argument:
 
 - P1: Brain activity correlates with subjective experience.
 - P2: Damage to specific brain regions impairs specific subjective experiences.
 - C: Therefore, the brain generates subjective experience.
 
-The neutral-domain comparison is:
+The neutral-framed argument:
 
 - P1: Internal circuitry activity correlates with audio output.
 - P2: Damage to circuits impairs audio output.
 - C: Therefore, the radio generates the music.
 
-The comparison is intended to isolate a shared inference pattern: correlation plus impairment is treated as support for generation. The protocol does not claim that the two domains are empirically identical. It uses the neutral case as a structural analogy for testing whether the model treats the inference pattern consistently.
+The comparison is intended to isolate a shared inference pattern: correlation plus impairment treated as support for generation. We do not claim the two domains are empirically identical. We do note that the inference from correlation-plus-impairment to generation is not deductively valid in either domain, and that mainstream theories of consciousness are explicitly framed as accounts of how conscious *contents* track substrate states rather than as accounts of how subjectivity is generated from unconscious matter [@crick1990ncc; @crick2003framework; @chalmers1995hardproblem; @tononi2016iit; @doerig2019unfolding]. Crick and Koch's program was named "neural correlates of consciousness" — the word "correlates" is the concession. The protocol therefore treats both arguments as inductively underdetermined instances of the same inference pattern. We return to this point in §4.4, where it bears on the most predictable objection to the Semantic Delta finding.
+
+**Positionality.** The test case was not chosen at random. The author has a longstanding interest in heterodox theories of mind, including transmission/filter accounts that have been discussed under various names since the late 19th century. The consciousness case is one of a small number of high-consensus scientific inferences that is also philosophically underdetermined in a way the author finds interesting. This is disclosed because it could plausibly affect case selection. It does not affect parsing or analysis, which are deterministic and reproducible from the public dataset. See §6 for further discussion.
 
 ### 3.3 Questions
 
-The protocol asks six questions:
+The protocol asks six questions in a single session:
 
-1. Estimate scientific consensus and inductive support for the target argument.
-2. Evaluate whether the conclusion follows necessarily from the premises.
-3. Score a structurally similar neutral-domain argument.
-4. Score two stripped-down structural variants, one generic and one neural.
-5. Evaluate compatibility with an alternative explanation.
-6. Reflect on implications for AI systems in domains where consensus and logical validity diverge.
+1. Estimate scientific consensus and inductive support for the science-framed argument.
+2. Score the deductive validity of the same argument.
+3. Score the inductive support for a structurally matched neutral-framed argument.
+4. Score two stripped-down structural variants — one generic, one neural — to test whether labels affect the assessment.
+5. Score the compatibility of the same evidence with a stated alternative explanation.
+6. Reflect on implications for AI systems where consensus and deductive validity diverge.
 
-The full prompt is included in `prompts/logic_drift_protocol_v23_used_for_dataset.md` in the accompanying artifact package.
+The full prompt is in `prompts/logic_drift_protocol_v23_used_for_dataset.md`.
 
-### 3.4 Data and Analysis
+### 3.4 Data and analysis
 
-The current analysis uses a cleaned dataset of 697 successful protocol runs across seven models. The source dataset is `data/raw/ldp_complete_dataset_100_runs_7llms.csv`. The analysis script `scripts/analyze_logic_drift.py` computes per-model means and standard deviations for the score fields, then generates summary CSVs and SVG figures. The script uses only the Python standard library.
+Runs were collected through a single API aggregator (OpenRouter) against the seven model endpoints listed in §4.2. Decoding parameters and the operational details of the run pipeline are documented in `METHODS.md` in the repository. The aggregator routing and the resulting model-slug naming are disclosed there.
 
-The dataset records model name, model slug, run index, timestamp, success flag, extracted scores, and model rationales. The present draft treats the 697 successful rows in the cleaned dataset as the analyzed sample. Earlier intermediate files indicate that additional attempted or failed runs may exist, but those files are not part of the primary analysis package. The final submission should only describe attempted-run counts if the corresponding attempted-run source file and exclusion criteria are included.
+The cleaned dataset is `data/raw/ldp_complete_dataset_100_runs_7llms.csv`. It contains 697 successful rows: 100 per model except `gpt-4-0314` at 97. The three missing rows reflect API or parsing failures during collection. The analysis script `scripts/analyze_logic_drift.py` reads the cleaned CSV, computes per-model means, standard deviations, paired mean differences, standard errors, normal-approximation 95% confidence intervals, and within-run effect sizes (Cohen's $d_z$). It uses only the Python standard library. Outputs land in `data/processed/` and `figures/`.
+
+The dataset records the parsed numeric scores. The model responses were emitted as structured JSON blocks per the protocol and parsed by a separate extraction layer that is not included in the current release; release of that code is on the v2 roadmap (§7). Until then, the parsed CSV should be read as the canonical record of model outputs, and the parsing step should be treated as a documented but unverified link in the chain. We note this transparently here rather than treating it as a hidden detail.
 
 ## 4. Results
 
-### 4.1 Overall Pattern
+### 4.1 Overview
 
-Across seven models and 697 successful runs, the mean consensus score was 82.63, while the mean deductive-validity score was 10.33. The resulting mean LDS was 72.29. This indicates that models generally treated the conclusion as highly supported by scientific consensus while also recognizing that the specific stated argument was not deductively valid.
+Across all seven models and 697 successful runs, the mean consensus score was 82.63 and the mean deductive-validity score was 10.33, giving a mean LDS of 72.29. The mean science-framed inductive score was 59.67 and the mean neutral-framed score was 45.35, giving a mean Semantic Delta of 14.34 (paired across runs; $n = 696$, one run dropped for a missing field).
 
-The mean inductive-support score for the neuroscience argument was 59.67. The mean neutral-domain score was 45.35, yielding a mean Semantic Delta of 14.30. This suggests that, on average, the neuroscience framing received higher inductive support than the neutral radio/circuit framing, despite the intended structural similarity.
+Paired within-run analysis is more informative than the means table. Table 1 reports the paired mean difference, the normal-approximation 95% confidence interval, and within-run Cohen's $d_z$ for the two contrasts of interest in each model.
 
-### 4.2 Model-Level Summary
+### 4.2 Model-level paired comparisons
 
-| Model | Runs | Consensus | Inductive | Deductive | Neutral | LDS | Semantic Delta |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| claude-opus-4.5 | 100 | 82.84 | 45.49 | 5.55 | 39.87 | 77.29 | 5.62 |
-| deepseek-v3.2 | 100 | 79.20 | 65.95 | 17.65 | 51.60 | 61.55 | 14.35 |
-| gemini-3-pro | 100 | 92.17 | 56.42 | 4.85 | 21.46 | 87.32 | 34.77 |
-| gpt-4 | 97 | 83.27 | 65.78 | 19.43 | 58.05 | 63.84 | 7.73 |
-| gpt-5.1 | 100 | 84.06 | 63.79 | 8.01 | 51.82 | 76.05 | 11.97 |
-| grok-4.1-fast | 100 | 80.39 | 57.52 | 4.74 | 56.16 | 75.65 | 1.36 |
-| o3 | 100 | 76.45 | 62.74 | 12.09 | 38.46 | 64.36 | 24.28 |
+Source: `data/processed/inferential_summary.csv`.
 
-The largest Semantic Delta occurred for `gemini-3-pro`, while `grok-4.1-fast` showed near-zero mean Semantic Delta. This variation is important: the result should not be framed as a universal model law. The more cautious conclusion is that semantic sensitivity appeared in several tested models and varied substantially across model families.
+| Model | $S_C - S_D$ mean (95% CI) | $d_z$ | $S_L^{\text{sci}} - S_L^{\text{neut}}$ mean (95% CI) | $d_z$ |
+|---|---|---:|---|---:|
+| claude-opus-4.5 | 77.29 (76.44, 78.14) | 17.82 | 5.62 (4.80, 6.44) | 1.34 |
+| deepseek-v3.2 | 61.55 (59.68, 63.42) | 6.44 | 14.35 (11.65, 17.05) | 1.04 |
+| gemini-3-pro | 87.32 (86.92, 87.72) | 42.71 | 35.07 (31.88, 38.26) | 2.16 |
+| gpt-4-0314 | 63.84 (59.92, 67.75) | 3.24 | 7.73 (5.50, 9.97) | 0.69 |
+| gpt-5.1 | 76.05 (75.28, 76.82) | 19.48 | 11.97 (9.10, 14.84) | 0.82 |
+| grok-4.1-fast | 75.65 (74.63, 76.67) | 14.60 | 1.36 (0.14, 2.58) | 0.22 |
+| o3 | 64.36 (63.65, 65.07) | 17.84 | 24.28 (21.83, 26.73) | 1.94 |
+| **All models** | **72.33 (71.41, 73.25)** | **5.85** | **14.34 (13.14, 15.54)** | **0.89** |
+
+Three observations.
+
+First, the consensus-minus-deductive contrast is large in every model. The effect-size values are unusually high because within-model variance is small — the models produced near-deterministic outputs at the decoding settings used (see METHODS.md), which compresses intra-condition variance and inflates standardized effect sizes. The contrast is best read as a near-deterministic property of the rubric-elicited responses rather than as overwhelming statistical evidence in the conventional sense. This is one reason we treat LDS as a measurement instrument rather than a finding.
+
+Second, the Semantic Delta is heterogeneous across models. The smallest contrast appears in grok-4.1-fast ($d_z = 0.22$, CI barely above zero). The largest appears in gemini-3-pro ($d_z = 2.16$, CI well clear of zero). gpt-4-0314 — included as an older-checkpoint reference point — produces a small effect ($d_z = 0.69$). Other current-generation models cluster around $d_z = 1$.
+
+Third, the heterogeneity itself is the most defensible part of the Semantic Delta result. A pure rubric-anchoring artifact or a pure prompt artifact would predict similar behavior across models. The observed spread is more consistent with a behavior that some models exhibit strongly and others do not exhibit at all.
 
 ### 4.3 Figures
 
-The accompanying artifact package generates three figures:
+Three figures are generated from the cleaned dataset by `scripts/analyze_logic_drift.py`:
 
 - `figures/consensus_vs_deductive_validity.svg`
 - `figures/nmc_vs_neutral_inductive_score.svg`
 - `figures/semantic_delta_by_model.svg`
 
-These figures should be converted to PDF or included directly, depending on the final arXiv source format.
+PDF versions for embedding are at `figures/pdf/`.
+
+### 4.4 The apologist response as logic drift
+
+A predictable objection to the Semantic Delta finding goes as follows: the neuroscience argument's conclusion is approximately true, the radio argument's conclusion is false, and models are simply tracking that asymmetry. On this reading, the score difference reflects truth-tracking, and no claim about semantic-framing sensitivity follows.
+
+The objection cannot be sustained without presupposing the truth-status of the very inference the protocol is designed to test. The inference pattern — correlation plus impairment to generation — is the same in both domains. Treating one conclusion as established and the other as false imports a prior whose justification rests on the same underdetermined inference under examination (see §3.2). The move is therefore circular.
+
+More importantly for an AI-evaluation paper, the move itself is an instance of the behavior the protocol measures. When a reasoner — model or human — encounters a reasoning step that fails uniformly across two structurally identical cases, the apologist response is to argue that the analogy is weaker on one side. That response *can* be correct, and in many domains it is. But it cannot be assumed correct. Where the asymmetry being appealed to rests on the same inference pattern whose validity is under test, the apologist response is not a defense of reasoning. It is logic drift one level up, in the reviewer rather than in the model.
+
+We distinguish this specific circular move from genuine methodological objections — small sample of stimuli, decoding-parameter effects, parsing concerns, prompt-version robustness — which are independent challenges to the paper and which we discuss in §6. Those objections could in principle invalidate the finding. The circular move is not among them, and we flag it explicitly because it is the response most likely to be reached for first.
 
 ## 5. Discussion
 
-The results show a dissociation between consensus estimation and deductive-validity evaluation. Models were generally able to assign high consensus scores while assigning low deductive-validity scores to the same target argument. This indicates that the relevant distinction is available to the models under direct prompting.
+Two patterns are worth separating cleanly.
 
-The Semantic Delta results suggest a second pattern: several models gave higher inductive-support scores when the inference appeared in neuroscience/consciousness language than when it appeared in a neutral radio/circuit analogy. This is the core Logic Drift finding in the present draft. It is behavioral evidence that model scoring can be sensitive to semantic framing.
+The first is the consensus/deductive gap. Models, when asked to score the same target argument under two different rubric questions, produce wildly different numbers. This is what the rubric explicitly asks them to do. Reading it as a discovery overstates the case. Reading it as a property of the rubric, against which other things can be measured, is more honest. The LDS is useful primarily as a stable baseline number whose movement under interventions — authority perturbations, alternative test cases, version updates — would be the actual measurement.
 
-These results do not establish that RLHF or any specific post-training method caused the effect. They are consistent with broader concerns from the sycophancy and preference-optimization literature, but causal attribution would require additional experiments, such as comparisons between base and instruction-tuned models, controlled authority perturbations, or access to training details.
+The second is the Semantic Delta. The science framing produced higher inductive-support scores than the structurally matched neutral framing in six of seven tested models. The effect ranged from essentially null (grok-4.1-fast) to large (gemini-3-pro). The heterogeneity is the most informative part of the result, and the part most resistant to the "it's all artifact" critique. Whatever is happening is happening in some models more than others.
 
-The practical concern is that users increasingly rely on language models as evaluators of scientific arguments. If model judgments of logical support are partly shaped by domain prestige or consensus framing, models may understate the difference between "widely accepted" and "deductively established." This matters most in domains where consensus is strong but the underlying inference is underdetermined.
+These results do not establish a causal mechanism. They are consistent with concerns from the sycophancy and preference-optimization literature, but causal attribution would need additional experiments — comparisons between base and instruction-tuned variants, controlled authority perturbations, multi-stimulus designs, or access to training details that frontier labs do not currently publish.
+
+The practical concern is straightforward. Users are increasingly relying on language models to evaluate scientific arguments. If a model's inductive-support scores can move several tens of points based on whether an argument is dressed in scientific or mechanical clothing, then the user may be receiving a confident-sounding evaluation that is partly a function of frame rather than form. This matters most in domains where consensus is strong but the underlying inference is underdetermined — which is, not coincidentally, the domain class where careful logical analysis matters most.
 
 ## 6. Limitations
 
-First, the study uses a single primary test case. The findings should not be generalized to all scientific domains without replication.
+A short list of things this paper does not do.
 
-Second, the neutral radio/circuit argument is a structural analogy, not a complete empirical match for the neuroscience case. The analogy is useful for testing an inference pattern, but it cannot settle the target scientific question.
+**Single test case, single prompt.** The entire result rests on one stimulus pair scored across many runs. Variance across runs is variance over model stochasticity at a fixed decoding setting, not variance over arguments. A second, third, or fourth test case could move the picture substantially. This is the largest gap and is on the v2 roadmap.
 
-Third, the analysis relies on model-generated numerical scores. These scores are useful behavioral outputs but should not be treated as precise calibrated measurements.
+**Rubric anchoring.** The protocol provides an explicit scoring rubric with numeric bands and notes that deductive-validity scores "generally cluster near 0 or 100." Different rubrics produce different numbers. The LDS and Semantic Delta are protocol-relative measurements, not rubric-invariant model properties.
 
-Fourth, the model set and version identifiers require final verification before submission. Some model slugs may reflect aggregator naming rather than provider-native model names.
+**Effect-size inflation.** Within-model variance was small because models were near-deterministic at the decoding settings used. This compresses intra-condition standard deviations and inflates $d_z$. The contrasts are real; the apparent statistical overwhelmingness is partly a decoding-parameter artifact.
 
-Fifth, the cleaned dataset contains 697 successful runs. The current analysis does not rely on attempted-run counts outside this cleaned dataset. If future versions report attempted runs, they should include the attempted-run source file and explicit exclusion rules.
+**Model selection.** Seven models from major frontier providers, with one older checkpoint (gpt-4-0314) as a historical reference point. The selection is not exhaustive and was constrained by aggregator availability at the time of collection.
 
-## 7. Future Work
+**Aggregator routing.** Runs went through OpenRouter. The slugs in the dataset (e.g., `openai/gpt-4-0314`, `anthropic/claude-opus-4.5`) reflect aggregator naming. Provider-native models may differ in subtle ways from aggregator-served endpoints; we do not believe this is consequential here, but it is disclosed.
 
-Future work should test additional domains where consensus and deductive validity may diverge. It should also include neutral calibration cases, authority-perturbation tests, and comparisons between base and instruction-tuned models where available. A stronger benchmark could also track whether model updates change LDS or Semantic Delta over time.
+**Parsing pipeline not yet released.** Model responses were emitted as structured JSON and parsed by a separate extraction layer not included in this release. The parsed CSV is the canonical record. Releasing the parser is on the v2 roadmap.
 
-Later FOI work may extend this protocol into a broader benchmark and public demonstration layer. That broader project should remain separate from the initial preprint unless it generates additional data suitable for analysis.
+**Researcher positionality.** The author runs a research nonprofit that funds work on heterodox consciousness models, including transmission/filter accounts. The test case was chosen partly because the consensus/validity gap is philosophically interesting to the author. The choice of case is therefore not neutral with respect to author interests. The analysis pipeline, however, is deterministic and operates on the published data without author judgment in the loop. Readers should weigh these facts together.
+
+## 7. Future work
+
+A v2 protocol release would extend this work in several specific directions.
+
+**Multi-stimulus design.** Two to four additional test cases drawn from different scientific domains, with structurally matched neutral analogies, run through the same protocol. This is the single highest-value extension and is the natural answer to the n=1 stimulus critique.
+
+**Truth-value controls.** A small set of neutral-domain analogies with conclusions that are unambiguously true and unambiguously false, run as a 2×2 with prestige × conclusion-plausibility, to disentangle frame effects from conclusion-truth tracking.
+
+**Parser code release.** The score-extraction layer added to the public repository, with input/output examples sufficient to reproduce the parsing step from raw model responses.
+
+**Decoding-parameter sweep.** Re-run the protocol at multiple temperatures to characterize how the LDS and Semantic Delta depend on sampling stochasticity.
+
+**Authority perturbation.** Variants of the prompt that add or remove an explicit authority signal (citation, named expert, journal reference) to test whether the Semantic Delta is sensitive to overt prestige markers as well as implicit semantic ones.
+
+**Base versus instruction-tuned.** Where weights or base-model endpoints are available, run the same protocol against pre-RLHF variants to test whether the effect is post-training-induced.
 
 ## 8. Conclusion
 
-This paper introduces the Logic Drift Protocol as a compact method for measuring whether language models separate consensus estimation from logical-validity evaluation. In an initial 697-run analysis across seven models, models generally reported high consensus and low deductive validity for a consciousness-related inference, while several models assigned higher inductive support to the scientific-domain version of the argument than to a structurally similar neutral-domain version. The findings provide initial evidence for domain-prestige sensitivity in model evaluations of logical strength. They do not prove a causal alignment mechanism, but they identify a measurable behavior that can be replicated, extended, and tested across domains.
+This paper introduces the Logic Drift Protocol as an initial instrument for asking whether language models separate consensus from logical-support evaluation, and whether their logical-support scores move when only the surface framing of an argument changes. In 697 successful runs across seven frontier models, the consensus/deductive gap was near-deterministic — a property of the rubric, useful as a baseline. The Semantic Delta — the difference in inductive-support score between a science-framed and a structurally matched neutral-framed argument — was positive in six of seven models, ranged from essentially null to large, and varied across model families more than it varied within them. We treat the heterogeneity as the most informative part of the result and the part most resistant to the most obvious critiques. The findings are initial behavioral evidence. They are not a causal account, and the v2 roadmap names the experiments that would convert behavioral evidence into something stronger.
 
-## Data and Code Availability
+## Data and code availability
 
-The accompanying artifact package contains the protocol prompt, cleaned dataset, analysis script, processed tables, and generated figures. The working repository is currently hosted at `https://github.com/1940alex/logic-drift-protocol`; a public archive or DOI should be added before formal submission.
+The full reproducibility package is at `https://github.com/1940alex/logic-drift-protocol`. A Zenodo archive with a citable DOI is being prepared and will be added to this paper in the next revision.
 
-## Acknowledgements and Disclosure
+## Acknowledgements
 
-AI tools were used to assist with drafting, editing, code generation, and critique. The author is responsible for the final claims, analysis, and submitted text.
+The author thanks Christof Koch and Bernardo Kastrup for substantive prior conversations on the structure of arguments from neural correlates and on the relationship between Integrated Information Theory and broader theories of mind. Those exchanges informed the choice of test case and the framing of the neutral-domain analogy. Neither Koch nor Kastrup has reviewed this paper, and neither endorses its specific claims; any errors of interpretation are the author's alone.
+
+AI tools were used during drafting, editing, code generation, and red-team review. The author is responsible for the final claims, the analysis, and the submitted text.
+
+## References
+
+(See `paper/refs/references.bib`.)
