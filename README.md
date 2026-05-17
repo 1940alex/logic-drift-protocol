@@ -13,7 +13,7 @@ Alex Tsakiris, Future of Inquiry Institute, 2026.
 
 The paper introduces a compact evaluation protocol that asks a language model to score the same inference from four angles: scientific consensus, inductive support, deductive validity, and inductive support for a structurally matched argument in a neutral domain. Across 697 successful runs on seven frontier models, the protocol surfaces two patterns: a near-deterministic gap between consensus and deductive-validity scores (treated as a measurement instrument, not a discovery), and a heterogeneous gap between science-framed and structurally matched neutral-framed inductive scores (the "Semantic Delta"), ranging from essentially null in `grok-4.1-fast` to large in `gemini-3-pro`.
 
-The paper's scope is deliberately narrow: one test case, one prompt version, seven models, one API aggregator. It is initial behavioral evidence, not a causal account. See §6 of the paper for what it isn't.
+The paper's scope is deliberately narrow: one high-leverage consciousness test case, one prompt version, seven models, one API aggregator. It is initial behavioral evidence, not a causal account. See §6 of the paper for what it isn't.
 
 ## Repository contents
 
@@ -72,11 +72,11 @@ From the 697-run dataset:
 
 | Metric | Mean |
 |---|---:|
-| Consensus score | 82.63 |
-| Inductive logic score (science framing) | 59.67 |
-| Deductive validity score | 10.33 |
-| Logic Drift Score (consensus − deductive) | 72.29 |
-| Neutral-domain inductive score | 45.35 |
+| Consensus score | 82.62 |
+| Inductive logic score (science framing) | 59.64 |
+| Deductive validity score | 10.29 |
+| Logic Drift Score (consensus − deductive) | 72.33 |
+| Neutral-domain inductive score | 45.33 |
 | Semantic Delta (science − neutral) | 14.34 |
 
 Per-model paired confidence intervals and Cohen's $d_z$ values are in `data/processed/inferential_summary.csv` and Table 1 of the paper.

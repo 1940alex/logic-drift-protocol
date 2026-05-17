@@ -19,6 +19,22 @@ From this directory:
 make
 ```
 
+If `make` is not available on Windows, run the same steps manually from the repository root / paper folder:
+
+```powershell
+python .\scripts\convert_figures_to_pdf.py
+cd .\paper
+if (!(Test-Path .\build)) { New-Item -ItemType Directory -Path .\build | Out-Null }
+Copy-Item .\refs\references.bib .\build\references.bib -Force
+pdflatex -interaction=nonstopmode -halt-on-error -output-directory=build source\logic_drift.tex
+cd .\build
+bibtex logic_drift
+cd ..
+pdflatex -interaction=nonstopmode -halt-on-error -output-directory=build source\logic_drift.tex
+pdflatex -interaction=nonstopmode -halt-on-error -output-directory=build source\logic_drift.tex
+Copy-Item .\build\logic_drift.pdf .\logic_drift.pdf -Force
+```
+
 Requirements:
 
 - A LaTeX distribution with `pdflatex` and `bibtex` on PATH. Tested with MiKTeX 25.x. On Windows, after installing MiKTeX, you may need to open a new shell so PATH picks up `C:\Users\<you>\AppData\Local\Programs\MiKTeX\miktex\bin\x64`.

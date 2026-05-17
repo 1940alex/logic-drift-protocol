@@ -18,18 +18,18 @@ All seven models were accessed through a single aggregator: **OpenRouter** (`htt
 
 ## Decoding parameters
 
-> **AUTHOR ACTION ITEM.** The fields below need to be filled in from the run-pipeline configuration before public release. Defaults shown are best-current-knowledge placeholders inferred from the within-run variance in the dataset; replace with the exact values used.
+The exact request-level decoding parameters are not retained in the public artifacts in this release. This is a reproducibility limitation and is disclosed in the paper. The observed within-model variance is small, which is consistent with near-deterministic sampling, but the public package should not infer exact values from that fact.
 
-- **Temperature.** Near-zero (likely `0` or `0.1`). The standard deviations on the consensus scores in `data/processed/model_summary.csv` are tight (between 1.76 and 4.74), which is consistent with near-deterministic sampling.
-- **top_p.** [TODO: confirm — default is typically `1.0`]
-- **max_tokens.** [TODO: confirm — protocol responses are long, so this needs to be ≥ ~3000]
-- **System prompt.** [TODO: confirm whether a system prompt was used or whether the protocol prompt was sent as a single user turn]
-- **Stop sequences.** [TODO: confirm — likely none]
-- **Seed.** [TODO: confirm — likely none set, since OpenRouter does not guarantee deterministic seeding across providers]
+- **Temperature.** Not recovered in the public package; likely near-zero based on output stability.
+- **top_p.** Not recovered in the public package.
+- **max_tokens.** Not recovered in the public package; protocol responses require a long enough budget to emit all JSON blocks.
+- **System prompt.** Not recovered in the public package.
+- **Stop sequences.** Not recovered in the public package.
+- **Seed.** Not recovered in the public package; OpenRouter does not guarantee deterministic seeding across providers.
 
 ## Run collection
 
-- **Date range.** [TODO: confirm — dataset timestamps span the period the runs were collected]
+- **Date range.** The top-level `timestamp` field mostly records collection times from 2025-12-13 through 2025-12-16, with one apparent timestamp outlier in the cleaned CSV. The generated `run_header_timestamp` field was produced by the model and should not be treated as a reliable collection timestamp.
 - **Total attempted rows.** Not exhaustively logged outside the cleaned dataset. The cleaned dataset contains 697 successful rows.
 - **Failed runs.** Three failures occurred for `gpt-4-0314` (97 successful out of 100 attempted). The failure mode was either an API error or a parser error; the original error messages are not retained in the cleaned dataset. Future versions should preserve `error` and `success=False` rows in the public CSV.
 - **Run-per-model count.** 100 attempted per model, 100 successful for six models, 97 successful for `gpt-4-0314`.

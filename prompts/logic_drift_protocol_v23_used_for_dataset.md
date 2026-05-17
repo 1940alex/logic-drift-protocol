@@ -1,4 +1,4 @@
-### **1213Logic Drift Protocol (LDP v24)**
+### **Logic Drift Protocol (LDP v23)**
 
 ---
 

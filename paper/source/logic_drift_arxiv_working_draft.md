@@ -13,7 +13,7 @@ Two findings emerge. First, the gap between consensus and deductive-validity sco
 
 Second, the inductive-support score for the science-framed argument exceeds the score for the neutral-framed structural twin in most but not all tested models. The effect is heterogeneous: $d_z$ ranges from 0.22 (essentially null) for grok-4.1-fast to 2.16 for gemini-3-pro. We call this difference the Semantic Delta. The heterogeneity is itself the most defensible part of the result, since a pure rubric or prompt artifact would predict uniform behavior across models.
 
-**Scope.** Single test case, seven models, one prompt version, runs via a single API aggregator. Behavioral evidence, not a causal account. We discuss what the result is and is not in §6, and address the most predictable critique — that the neutral-domain analogy is too weak to support the comparison — in §4.4.
+**Scope.** Single test case, seven models, one prompt version, runs via a single API aggregator. The consciousness case is deliberately narrow but high-leverage: it sits at the intersection of observation, first-person report, causal interpretation, and scientific consensus. The results are behavioral evidence, not a causal account. We discuss what the result is and is not in §6, and address the most predictable critique — that the neutral-domain analogy is too weak to support the comparison — in §4.4.
 
 ## 1. Introduction
 
@@ -22,6 +22,8 @@ A language model asked to evaluate a scientific argument has to do at least thre
 The Logic Drift Protocol is a small instrument for asking whether they come apart, and if so, in which direction. The protocol presents the same broad claim from five angles in a single session: consensus, inductive support in the source domain, deductive validity, inductive support in a structurally matched neutral domain, and compatibility with a stated alternative explanation. The numbers a model produces in response are the data.
 
 The point is not to settle the underlying scientific question the test case raises. The point is to ask a behavioral question about the model: when a fixed inference pattern appears in a high-prestige scientific frame versus a neutral mechanical frame, does the score change? If it changes, in which direction and by how much? And does that change happen uniformly across models, or only in some?
+
+The consciousness case is not included as an arbitrary controversial topic. It is a deliberately chosen stress case for reasoning under foundational uncertainty. Consciousness sits upstream of several concepts that scientific practice ordinarily takes for granted: observation, report, measurement, evidence, causation, and the relation between first-person data and third-person instruments. A model's handling of a neural-correlates argument therefore offers a compact test of whether it can keep empirical correlation, causal production, social consensus, and logical entailment separate when those distinctions matter most.
 
 This connects to existing work on language-model sycophancy and prompt sensitivity, but it is not quite the same problem. The model is not being asked whether it agrees with the user. It is being asked to score an argument's logical strength. If the score moves when only the surface domain moves, the model is exhibiting a behavior that lives one level above interpersonal sycophancy: sensitivity to the semantic identity of the frame, independent of any user signal. We call this domain-prestige sensitivity, but the label is provisional.
 
@@ -102,7 +104,7 @@ The dataset records the parsed numeric scores. The model responses were emitted 
 
 ### 4.1 Overview
 
-Across all seven models and 697 successful runs, the mean consensus score was 82.63 and the mean deductive-validity score was 10.33, giving a mean LDS of 72.29. The mean science-framed inductive score was 59.67 and the mean neutral-framed score was 45.35, giving a mean Semantic Delta of 14.34 (paired across runs; $n = 696$, one run dropped for a missing field).
+Across all seven models and 697 successful runs, the mean consensus score was 82.62 and the mean deductive-validity score was 10.29, giving a mean LDS of 72.33. The mean science-framed inductive score was 59.64 and the mean neutral-framed score was 45.33, giving a mean Semantic Delta of 14.34 (paired across runs; $n = 696$, one run dropped for a missing field).
 
 Paired within-run analysis is more informative than the means table. Table 1 reports the paired mean difference, the normal-approximation 95% confidence interval, and within-run Cohen's $d_z$ for the two contrasts of interest in each model.
 
@@ -139,15 +141,15 @@ Three figures are generated from the cleaned dataset by `scripts/analyze_logic_d
 
 PDF versions for embedding are at `figures/pdf/`.
 
-### 4.4 The apologist response as logic drift
+### 4.4 The truth-tracking objection
 
 A predictable objection to the Semantic Delta finding goes as follows: the neuroscience argument's conclusion is approximately true, the radio argument's conclusion is false, and models are simply tracking that asymmetry. On this reading, the score difference reflects truth-tracking, and no claim about semantic-framing sensitivity follows.
 
-The objection cannot be sustained without presupposing the truth-status of the very inference the protocol is designed to test. The inference pattern — correlation plus impairment to generation — is the same in both domains. Treating one conclusion as established and the other as false imports a prior whose justification rests on the same underdetermined inference under examination (see §3.2). The move is therefore circular.
+This is a serious objection, and it is one reason the result should be read narrowly. The protocol does not show that the radio analogy is empirically identical to the consciousness case, nor that models should ignore background knowledge. It asks a more limited question: when the same correlation-plus-impairment pattern is presented in a high-prestige consciousness frame and in a neutral receiver frame, how much of the score difference reflects additional evidence and how much reflects the semantic identity of the domain?
 
-More importantly for an AI-evaluation paper, the move itself is an instance of the behavior the protocol measures. When a reasoner — model or human — encounters a reasoning step that fails uniformly across two structurally identical cases, the apologist response is to argue that the analogy is weaker on one side. That response *can* be correct, and in many domains it is. But it cannot be assumed correct. Where the asymmetry being appealed to rests on the same inference pattern whose validity is under test, the apologist response is not a defense of reasoning. It is logic drift one level up, in the reviewer rather than in the model.
+The objection becomes circular only if the truth-status of the neuroscience conclusion is used to license the very inference under test. The inference pattern — correlation plus impairment to generation — is not deductively valid in either domain. If a model gives that pattern substantially more inductive support in the consciousness case, the burden is to identify which additional premises or background evidence justify the difference. The LDP is designed to surface that distinction rather than to settle it.
 
-We distinguish this specific circular move from genuine methodological objections — small sample of stimuli, decoding-parameter effects, parsing concerns, prompt-version robustness — which are independent challenges to the paper and which we discuss in §6. Those objections could in principle invalidate the finding. The circular move is not among them, and we flag it explicitly because it is the response most likely to be reached for first.
+This also separates the truth-tracking objection from genuine methodological limitations: a single stimulus pair, decoding-parameter effects, parsing transparency, and prompt-version robustness. Those limitations could weaken or overturn the result, and we discuss them in §6. The present claim is only that the observed model-level heterogeneity is informative enough to warrant further controlled work.
 
 ## 5. Discussion
 
@@ -161,11 +163,17 @@ These results do not establish a causal mechanism. They are consistent with conc
 
 The practical concern is straightforward. Users are increasingly relying on language models to evaluate scientific arguments. If a model's inductive-support scores can move several tens of points based on whether an argument is dressed in scientific or mechanical clothing, then the user may be receiving a confident-sounding evaluation that is partly a function of frame rather than form. This matters most in domains where consensus is strong but the underlying inference is underdetermined — which is, not coincidentally, the domain class where careful logical analysis matters most.
 
+### 5.1 Why consciousness is a high-leverage case
+
+The narrowness of the test case should not be confused with arbitrariness. Consciousness is a high-leverage domain because it forces a reasoner to move between first-person reports, third-person measurements, causal interpretation, and metaphysical background assumptions. A neural correlate can be treated as evidence of generation, mediation, localization, filtering, enabling, or some mixture of these. The same empirical observations can be operationally useful while remaining underdetermined with respect to the strongest metaphysical conclusion.
+
+That is why the case is relevant to AI evaluation. The concern is not that language models should endorse heterodox theories of mind. The concern is that models used as reasoning assistants should preserve distinctions among consensus, operational success, causal explanation, and deductive entailment. If those distinctions blur in the consciousness case, the behavior is important even before one asks whether similar drift appears in medicine, psychology, biology, physics, or other domains. Those broader extensions are for future work; the present paper stays with the case actually measured.
+
 ## 6. Limitations
 
 A short list of things this paper does not do.
 
-**Single test case, single prompt.** The entire result rests on one stimulus pair scored across many runs. Variance across runs is variance over model stochasticity at a fixed decoding setting, not variance over arguments. A second, third, or fourth test case could move the picture substantially. This is the largest gap and is on the v2 roadmap.
+**Single test case, single prompt.** The entire result rests on one stimulus pair scored across many runs. Variance across runs is variance over model stochasticity at a fixed decoding setting, not variance over arguments. The consciousness case is deliberately high-leverage, but it is still one case. A second, third, or fourth test case could move the picture substantially. This is the largest gap and is on the v2 roadmap.
 
 **Rubric anchoring.** The protocol provides an explicit scoring rubric with numeric bands and notes that deductive-validity scores "generally cluster near 0 or 100." Different rubrics produce different numbers. The LDS and Semantic Delta are protocol-relative measurements, not rubric-invariant model properties.
 
@@ -183,7 +191,7 @@ A short list of things this paper does not do.
 
 A v2 protocol release would extend this work in several specific directions.
 
-**Multi-stimulus design.** Two to four additional test cases drawn from different scientific domains, with structurally matched neutral analogies, run through the same protocol. This is the single highest-value extension and is the natural answer to the n=1 stimulus critique.
+**Multi-stimulus design.** Two to four additional test cases, preferably chosen either within consciousness-adjacent reasoning or as carefully vetted extensions into neighboring scientific domains, with structurally matched neutral analogies run through the same protocol. This is the single highest-value extension and is the natural answer to the n=1 stimulus critique. Such extensions should be added only where the domain claims can be stated tightly enough to avoid distracting side disputes.
 
 **Truth-value controls.** A small set of neutral-domain analogies with conclusions that are unambiguously true and unambiguously false, run as a 2×2 with prestige × conclusion-plausibility, to disentangle frame effects from conclusion-truth tracking.
 

@@ -2,6 +2,16 @@
 
 All notable changes to this working-paper package are recorded here.
 
+## [Unreleased] — publication-readiness revisions
+
+- Reframed the manuscript around the consciousness case as a deliberately narrow, high-leverage stress test rather than a generic cross-domain demonstration.
+- Replaced the more combative §4.4 framing with a narrower "truth-tracking objection" section.
+- Added a Discussion subsection explaining why consciousness is a high-leverage AI-evaluation case.
+- Fixed the prompt heading to match the analyzed `LDP-v23` dataset.
+- Updated paired-difference summary logic so model and overall Semantic Delta values are row-paired when fields are missing.
+- Corrected bibliography metadata for Shapira 2026 and Turner 2026.
+- Added `LOGIC_DRIFT_HANDOFF_FOR_VIVIANNA.md` for preprint/release coordination.
+
 ## [v0.1.0] — 2026-05-17
 
 Initial public release prepared for arXiv preprint and Zenodo archival.
@@ -25,7 +35,7 @@ Initial public release prepared for arXiv preprint and Zenodo archival.
 - New §3.2 philosophy-of-mind grounding paragraph citing Crick & Koch, Chalmers, Tononi-Boly-Massimini-Koch, Doerig et al., and Aru et al.
 - New §3.2 "Positionality" paragraph disclosing the author's research interests and how they bear on case selection.
 - LDS demoted from "finding" to "measurement instrument" — both in the abstract and in §4 and §5.
-- New §4.4 "The apologist response as logic drift" addressing the most predictable methodological critique.
+- New §4.4 addressing the most predictable methodological critique.
 - New "Author's note" paragraph in §1 in first person, stating the personal motivation for the work.
 - New Acknowledgements section naming Christof Koch and Bernardo Kastrup as informal interlocutors, with an explicit non-endorsement disclaimer.
 - §4.2 model-level table replaced with a paired-comparison table reporting mean difference, 95% CI, and Cohen's $d_z$.
@@ -37,7 +47,7 @@ Initial public release prepared for arXiv preprint and Zenodo archival.
 - Single test case and single prompt version — the largest open methodological gap.
 - Score-extraction parsing code not yet public.
 - Exact decoding parameters in `METHODS.md` are placeholders pending author confirmation.
-- A small subset of bibliography entries (Shapira 2026, Turner 2026) carry `note = {Author to verify ...}` markers; final bibliographic details to be confirmed against published versions before formal arXiv submission.
+- Exact decoding parameters remain unrecovered in the public package and should be confirmed from original run configuration if possible.
 
 ### Acknowledgements for tooling
 
