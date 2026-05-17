@@ -47,7 +47,7 @@ The old draft says or implies 700 runs. The clean dataset currently supports:
 
 > 697 successful protocol runs across seven models.
 
-If the final paper says "700 attempted runs," it needs a short exclusions sentence.
+If the final paper says "700 attempted runs," it needs the attempted-run source file and a short exclusions sentence. The current cleaned analysis package supports "697 successful runs."
 
 ## What Needs Human Review
 

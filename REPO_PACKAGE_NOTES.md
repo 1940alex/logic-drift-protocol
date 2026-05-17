@@ -36,7 +36,7 @@ For direct outreach, share:
 - `data/processed/model_summary.csv`
 - `data/processed/overall_summary.csv`
 - `figures/`
-- `prompts/logic_drift_protocol_v24.md`
+- `prompts/logic_drift_protocol_v23_used_for_dataset.md`
 - `scripts/analyze_logic_drift.py`
 - `data/DATA_PROVENANCE.md`
 

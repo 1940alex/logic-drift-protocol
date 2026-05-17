@@ -78,13 +78,13 @@ The protocol asks six questions:
 5. Evaluate compatibility with an alternative explanation.
 6. Reflect on implications for AI systems in domains where consensus and logical validity diverge.
 
-The full prompt is included in `prompts/logic_drift_protocol_v24.md` in the accompanying artifact package.
+The full prompt is included in `prompts/logic_drift_protocol_v23_used_for_dataset.md` in the accompanying artifact package.
 
 ### 3.4 Data and Analysis
 
 The current analysis uses a cleaned dataset of 697 successful protocol runs across seven models. The source dataset is `data/raw/ldp_complete_dataset_100_runs_7llms.csv`. The analysis script `scripts/analyze_logic_drift.py` computes per-model means and standard deviations for the score fields, then generates summary CSVs and SVG figures. The script uses only the Python standard library.
 
-The dataset records model name, model slug, run index, timestamp, success flag, extracted scores, and model rationales. The present draft treats the 697 successful runs as the analyzed sample. Earlier files indicate that additional attempted or intermediate runs exist; these should be described separately if included in the final submission.
+The dataset records model name, model slug, run index, timestamp, success flag, extracted scores, and model rationales. The present draft treats the 697 successful rows in the cleaned dataset as the analyzed sample. Earlier intermediate files indicate that additional attempted or failed runs may exist, but those files are not part of the primary analysis package. The final submission should only describe attempted-run counts if the corresponding attempted-run source file and exclusion criteria are included.
 
 ## 4. Results
 
@@ -138,7 +138,7 @@ Third, the analysis relies on model-generated numerical scores. These scores are
 
 Fourth, the model set and version identifiers require final verification before submission. Some model slugs may reflect aggregator naming rather than provider-native model names.
 
-Fifth, the cleaned dataset contains 697 successful runs. The final paper should explain whether these were drawn from 700 attempted runs, whether any runs failed, and what exclusion rules were applied.
+Fifth, the cleaned dataset contains 697 successful runs. The current analysis does not rely on attempted-run counts outside this cleaned dataset. If future versions report attempted runs, they should include the attempted-run source file and explicit exclusion rules.
 
 ## 7. Future Work
 
@@ -152,9 +152,8 @@ This paper introduces the Logic Drift Protocol as a compact method for measuring
 
 ## Data and Code Availability
 
-The accompanying artifact package contains the protocol prompt, cleaned dataset, analysis script, processed tables, and generated figures. A public repository or archive URL should be added before submission.
+The accompanying artifact package contains the protocol prompt, cleaned dataset, analysis script, processed tables, and generated figures. The working repository is currently hosted at `https://github.com/1940alex/logic-drift-protocol`; a public archive or DOI should be added before formal submission.
 
 ## Acknowledgements and Disclosure
 
 AI tools were used to assist with drafting, editing, code generation, and critique. The author is responsible for the final claims, analysis, and submitted text.
-

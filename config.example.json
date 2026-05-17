@@ -5,7 +5,7 @@
   "api_key_env": "OPENROUTER_API_KEY",
   "openrouter_url": "https://openrouter.ai/api/v1/chat/completions",
   "runs_per_model": 1,
-  "prompt_file": "prompts/logic_drift_protocol_v24.md",
+  "prompt_file": "prompts/logic_drift_protocol_v23_used_for_dataset.md",
   "models": [
     {
       "name": "claude-opus-4.5",
