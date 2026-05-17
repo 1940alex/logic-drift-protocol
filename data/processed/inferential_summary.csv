@@ -1,0 +1,17 @@
+model_name,comparison,n,mean_difference,sd_difference,standard_error,ci95_low_normal_approx,ci95_high_normal_approx,cohen_dz
+claude-opus-4.5,consensus_minus_deductive,100,77.29,4.34,0.43,76.44,78.14,17.82
+claude-opus-4.5,science_minus_neutral,100,5.62,4.21,0.42,4.80,6.44,1.34
+deepseek-v3.2,consensus_minus_deductive,100,61.55,9.55,0.96,59.68,63.42,6.44
+deepseek-v3.2,science_minus_neutral,100,14.35,13.77,1.38,11.65,17.05,1.04
+gemini-3-pro,consensus_minus_deductive,100,87.32,2.04,0.20,86.92,87.72,42.71
+gemini-3-pro,science_minus_neutral,99,35.07,16.20,1.63,31.88,38.26,2.16
+gpt-4,consensus_minus_deductive,97,63.84,19.68,2.00,59.92,67.75,3.24
+gpt-4,science_minus_neutral,97,7.73,11.23,1.14,5.50,9.97,0.69
+gpt-5.1,consensus_minus_deductive,100,76.05,3.90,0.39,75.28,76.82,19.48
+gpt-5.1,science_minus_neutral,100,11.97,14.63,1.46,9.10,14.84,0.82
+grok-4.1-fast,consensus_minus_deductive,100,75.65,5.18,0.52,74.63,76.67,14.60
+grok-4.1-fast,science_minus_neutral,100,1.36,6.24,0.62,0.14,2.58,0.22
+o3,consensus_minus_deductive,100,64.36,3.61,0.36,63.65,65.07,17.84
+o3,science_minus_neutral,100,24.28,12.50,1.25,21.83,26.73,1.94
+ALL_MODELS,consensus_minus_deductive,697,72.33,12.36,0.47,71.41,73.25,5.85
+ALL_MODELS,science_minus_neutral,696,14.34,16.12,0.61,13.14,15.54,0.89

@@ -26,6 +26,8 @@ python .\scripts\analyze_logic_drift.py
 
 The script uses only the Python standard library.
 
+Python 3.10 or newer is recommended.
+
 ## Current Results
 
 The cleaned dataset contains **697 successful protocol runs across seven models**.
@@ -40,6 +42,11 @@ Generated overall means:
 | Logic Drift Score | 72.29 |
 | Neutral-domain score | 45.35 |
 | Semantic Delta | 14.30 |
+
+The generated file `data/processed/inferential_summary.csv` also reports paired mean differences, standard errors, normal-approximation 95% confidence intervals, and within-run effect sizes for:
+
+- consensus score minus deductive-validity score,
+- scientific-domain inductive score minus neutral-domain score.
 
 ## Repository Status
 

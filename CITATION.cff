@@ -14,7 +14,6 @@ keywords:
   - prompt sensitivity
   - consensus
   - validity
-license: "NOASSERTION"
-repository-code: "https://example.com/future-repo-url"
-date-released: "2026-05-18"
-
+license: "CC-BY-4.0"
+repository-code: "https://github.com/1940alex/logic-drift-protocol"
+date-released: "2026-05-17"

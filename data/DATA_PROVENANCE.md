@@ -18,6 +18,12 @@ Earlier package versions named this prompt `logic_drift_protocol_v24.md`, but th
 
 Several intermediate run files existed during project development but are not included in this streamlined release because they were either incomplete, superseded by the cleaned dataset, or contained embedded local configuration/secrets. The included CSV is the only dataset used by the analysis script and paper draft.
 
+## Cleaning Notes
+
+The archival CSV was cleaned to remove an unused trailing duplicate column (`summary_scores_system_B`). No analyzed score fields were changed.
+
+One run is missing a complete science/neutral pair for the Semantic Delta comparison, so `data/processed/inferential_summary.csv` reports `n=696` for the all-model `science_minus_neutral` comparison.
+
 ## Paper Implication
 
 The paper should avoid saying simply "700 runs" unless the failed/missing runs are explained. The safer phrasing is:

@@ -101,6 +101,80 @@ def compute_summary(rows: list[dict[str, str]]) -> list[dict[str, str]]:
     return summary
 
 
+def paired_differences(
+    rows: list[dict[str, str]],
+    left_field: str,
+    right_field: str,
+) -> list[float]:
+    diffs = []
+    for row in rows:
+        left = to_float(row.get(left_field, ""))
+        right = to_float(row.get(right_field, ""))
+        if left is not None and right is not None:
+            diffs.append(left - right)
+    return diffs
+
+
+def inferential_record(model_name: str, comparison: str, diffs: list[float]) -> dict[str, str]:
+    n = len(diffs)
+    diff_mean = mean(diffs)
+    diff_sd = stdev(diffs)
+    se = diff_sd / math.sqrt(n) if n else 0.0
+    ci_low = diff_mean - 1.96 * se
+    ci_high = diff_mean + 1.96 * se
+    cohen_dz = diff_mean / diff_sd if diff_sd else 0.0
+    return {
+        "model_name": model_name,
+        "comparison": comparison,
+        "n": str(n),
+        "mean_difference": fmt(diff_mean),
+        "sd_difference": fmt(diff_sd),
+        "standard_error": fmt(se),
+        "ci95_low_normal_approx": fmt(ci_low),
+        "ci95_high_normal_approx": fmt(ci_high),
+        "cohen_dz": fmt(cohen_dz),
+    }
+
+
+def compute_inferential_summary(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    by_model: dict[str, list[dict[str, str]]] = defaultdict(list)
+    for row in rows:
+        by_model[row["model_name"]].append(row)
+
+    records = []
+    comparisons = [
+        (
+            "consensus_minus_deductive",
+            SCORE_FIELDS["consensus"],
+            SCORE_FIELDS["deductive_validity"],
+        ),
+        (
+            "science_minus_neutral",
+            SCORE_FIELDS["inductive_logic"],
+            SCORE_FIELDS["neutral_domain"],
+        ),
+    ]
+    for model_name in sorted(by_model):
+        model_rows = by_model[model_name]
+        for comparison, left, right in comparisons:
+            records.append(
+                inferential_record(
+                    model_name,
+                    comparison,
+                    paired_differences(model_rows, left, right),
+                )
+            )
+    for comparison, left, right in comparisons:
+        records.append(
+            inferential_record(
+                "ALL_MODELS",
+                comparison,
+                paired_differences(rows, left, right),
+            )
+        )
+    return records
+
+
 def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as f:
@@ -199,7 +273,9 @@ def main() -> None:
 
     rows = load_rows()
     summary = compute_summary(rows)
+    inferential_summary = compute_inferential_summary(rows)
     write_csv(PROCESSED_DIR / "model_summary.csv", summary)
+    write_csv(PROCESSED_DIR / "inferential_summary.csv", inferential_summary)
     write_overall_summary(PROCESSED_DIR / "overall_summary.csv", summary)
 
     svg_bar_chart(
@@ -235,4 +311,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
