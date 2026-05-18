@@ -5,7 +5,9 @@ All notable changes to this working-paper package are recorded here.
 ## [Unreleased] — publication-readiness revisions
 
 - Reframed the manuscript around the consciousness case as a deliberately narrow, high-leverage stress test rather than a generic cross-domain demonstration.
-- Replaced the more combative §4.4 framing with a narrower "truth-tracking objection" section.
+- Replaced the more combative §4.4 framing with a narrower section, renamed in the latest pass to "The truth-asymmetry objection." The section now treats the predictable critique seriously, surfaces its circular structure when it appeals to the very inference under test, and notes that the move itself is a small instance of the pattern the paper is measuring — while explicitly carving out legitimate methodological objections.
+- Rewrote the §1 paragraph on why the consciousness case is high-leverage. Replaced the unmodified "consciousness sits upstream of observation" assertion with a historical grounding via Max Planck's 1931 statement on consciousness as fundamental, framed as a position whose openness in the literature motivates the case selection — without the paper itself asserting Planck's metaphysics.
+- Added `planck1931consciousness` to the bibliography; final attribution flagged for pre-submission verification.
 - Added a Discussion subsection explaining why consciousness is a high-leverage AI-evaluation case.
 - Fixed the prompt heading to match the analyzed `LDP-v23` dataset.
 - Updated paired-difference summary logic so model and overall Semantic Delta values are row-paired when fields are missing.
