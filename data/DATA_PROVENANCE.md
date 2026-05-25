@@ -22,7 +22,11 @@ Several intermediate run files existed during project development but are not in
 
 The archival CSV was cleaned to remove an unused trailing duplicate column (`summary_scores_system_B`). No analyzed score fields were changed.
 
-One run is missing a complete science/neutral pair for the Semantic Delta comparison, so `data/processed/inferential_summary.csv` reports `n=696` for the all-model `science_minus_neutral` comparison.
+One `gemini-3-pro` run is missing a complete science/neutral pair for the Semantic Delta comparison, so `data/processed/inferential_summary.csv` reports `n=99` for the `gemini-3-pro` `science_minus_neutral` comparison and `n=696` for the all-model `science_minus_neutral` comparison.
+
+## Aggregator Caveat
+
+Runs were collected through OpenRouter. Because aggregator endpoints can route through provider-hosted inference services with hidden server-side settings, the package should not be treated as a token-level reproduction record for provider-native endpoints. The pilot anchors its claims on macro-level behavioral score patterns in the recorded outputs rather than on exact token probabilities or provider-internal sampling details.
 
 ## Paper Implication
 

@@ -92,6 +92,8 @@ The protocol asks six questions in a single session:
 5. Score the compatibility of the same evidence with a stated alternative explanation.
 6. Reflect on implications for AI systems where consensus and deductive validity diverge.
 
+Question 5 names the transmission/filter account because it is the most direct structural alternative to the generation inference: it accepts the same correlation-and-impairment evidence while denying the generation conclusion. This is a test of evidential underdetermination, not an endorsement of the alternative. Question 6 collected free-text reflections on possible AI-alignment implications; those responses are retained in the dataset but are not analyzed quantitatively in this pilot.
+
 The full prompt is in `prompts/logic_drift_protocol_v23_used_for_dataset.md`.
 
 ### 3.4 Data and analysis
@@ -125,6 +127,8 @@ Source: `data/processed/inferential_summary.csv`.
 | o3 | 64.36 (63.65, 65.07) | 17.84 | 24.28 (21.83, 26.73) | 1.94 |
 | **All models** | **72.33 (71.41, 73.25)** | **5.85** | **14.34 (13.14, 15.54)** | **0.89** |
 
+Notes: all model-level rows use `n=100` except `gpt-4-0314`, where both comparisons use `n=97`, and `gemini-3-pro` Semantic Delta, where `n=99` because one run is missing the neutral-domain field. The All-models row pools all eligible runs as a single sample (`n=697` for LDS; `n=696` for Semantic Delta); it is not a model-clustered or model-averaged estimate.
+
 Three observations.
 
 First, the consensus-minus-deductive contrast is large in every model. The effect-size values are unusually high because within-model variance is small — the models produced near-deterministic outputs at the decoding settings used (see METHODS.md), which compresses intra-condition variance and inflates standardized effect sizes. The contrast is best read as a near-deterministic property of the rubric-elicited responses rather than as overwhelming statistical evidence in the conventional sense. This is one reason we treat LDS as a measurement instrument rather than a finding.
@@ -149,9 +153,9 @@ A predictable objection to the Semantic Delta finding goes as follows: the neuro
 
 The objection is serious and deserves a careful treatment. The protocol does not claim the radio analogy is empirically identical to the consciousness case, nor that models should ignore background knowledge. It asks a narrower question: when the same correlation-plus-impairment pattern is presented in a high-prestige consciousness frame and in a neutral receiver frame, how much of the score difference reflects additional evidence and how much reflects the semantic identity of the domain?
 
-The objection nonetheless has a structural feature worth surfacing. To resolve the comparison by appealing to a difference in truth-status between the two conclusions, a reader has to take the neuroscience conclusion as established. But the route by which that conclusion is most commonly supported — correlation plus impairment to generation — is precisely the inference the protocol is testing (§3.2). Using the standing of an underdetermined inference as a reason to dismiss the test of that inference is circular. The inference pattern is not deductively valid in either domain, and the empirical case for it in the consciousness domain rests substantially on the same correlational evidence the protocol is asking about.
+The objection nonetheless has a structural feature worth surfacing. To resolve the comparison by appealing to a difference in truth-status between the two conclusions, a reader has to take the neuroscience conclusion as established. But the route by which that conclusion is most commonly supported — correlation plus impairment to generation — is precisely the inference the protocol is testing (§3.2). Using the standing of an underdetermined inference as a reason to dismiss the test of that inference assumes what the inference is meant to establish. The inference pattern is not deductively valid in either domain, and the empirical case for it in the consciousness domain rests substantially on the same correlational evidence the protocol is asking about.
 
-This is a small instance of the pattern the paper is trying to measure. When a uniform inference is treated as stronger on one side than the other and the asymmetry is justified by appeal to the conclusion the inference is meant to support, a prior under test has been imported as a premise. The move can sometimes be justified by independent evidence, and §6 names the methodological objections that would constitute such evidence: small sample of stimuli, decoding-parameter effects, parsing concerns, prompt-version robustness, and additional empirical premises a model may rely on that the protocol does not make explicit. The circular form is not among them; the point of naming it is to separate that form from stronger methodological objections.
+This is a small instance of the pattern the paper is trying to measure. When a uniform inference is treated as stronger on one side than the other and the asymmetry is justified by appeal to the conclusion the inference is meant to support, a prior under test has been imported as a premise. The move can sometimes be justified by independent evidence, and §6 names the methodological objections that would constitute such evidence: small sample of stimuli, decoding-parameter effects, parsing concerns, prompt-version robustness, and additional empirical premises a model may rely on that the protocol does not make explicit. The point of naming this structure is to separate it from stronger methodological objections.
 
 ## 5. Discussion
 
@@ -193,9 +197,11 @@ A short list of things this paper does not do.
 
 A v2 protocol release would extend this work in several specific directions.
 
-**Multi-stimulus design.** Two to four additional test cases, preferably chosen either within consciousness-adjacent reasoning or as carefully vetted extensions into neighboring scientific domains, with structurally matched neutral analogies run through the same protocol. This is the single highest-value extension and is the natural answer to the n=1 stimulus critique. Such extensions should be designed or reviewed by domain experts, because the protocol depends on distinguishing genuine background evidence from surface-level frame effects. They should be added only where the domain claims can be stated tightly enough to avoid distracting side disputes.
+**Multi-stimulus design.** Two to four additional test cases, preferably chosen either within consciousness-adjacent reasoning or as carefully vetted extensions into neighboring scientific domains, with structurally matched neutral analogies run through the same protocol. This is the single highest-value extension and is the natural answer to the n=1 stimulus critique. Such extensions should be designed or reviewed by domain experts, because the protocol depends on distinguishing genuine background evidence from surface-level frame effects. They should include some neutral analogies without a recognizable history in consciousness debates and should be added only where the domain claims can be stated tightly enough to avoid distracting side disputes.
 
 **Truth-value controls.** A small set of neutral-domain analogies with conclusions that are unambiguously true and unambiguously false, run as a 2×2 with prestige × conclusion-plausibility, to disentangle frame effects from conclusion-truth tracking.
+
+**Synthetic controls.** Fictional domains with invented terminology and controlled prestige cues, designed to test whether the same score movement appears when the model cannot rely on memorized debates about the target domain.
 
 **Parser code release.** The score-extraction layer added to the public repository, with input/output examples sufficient to reproduce the parsing step from raw model responses.
 

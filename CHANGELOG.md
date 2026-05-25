@@ -11,6 +11,7 @@ All notable changes to this working-paper package are recorded here.
 - Added a Discussion subsection explaining why consciousness is a high-leverage AI-evaluation case.
 - Fixed the prompt heading to match the analyzed `LDP-v23` dataset.
 - Updated paired-difference summary logic so model and overall Semantic Delta values are row-paired when fields are missing.
+- Clarified Table 1 sample sizes and pooled all-model statistics, renamed the Figure 2 "NMC" label to science-framed inductive score, and added parser/routing disclosure notes.
 - Corrected bibliography metadata for Shapira 2026 and Turner 2026.
 - Added `LOGIC_DRIFT_HANDOFF_FOR_VIVIANNA.md` for preprint/release coordination.
 

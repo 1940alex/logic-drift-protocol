@@ -309,9 +309,9 @@ def main() -> None:
     svg_bar_chart(
         FIGURES_DIR / "nmc_vs_neutral_inductive_score.svg",
         summary,
-        "NMC vs. Neutral Inductive Logic Score by Model",
+        "Science-Framed vs. Neutral Inductive Score by Model",
         [
-            ("inductive_logic_mean", "NMC inductive logic", "#54A24B"),
+            ("inductive_logic_mean", "Science-framed score", "#54A24B"),
             ("neutral_domain_mean", "Neutral/radio score", "#B279A2"),
         ],
     )

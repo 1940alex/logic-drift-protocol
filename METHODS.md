@@ -50,6 +50,8 @@ The full prompt is in `prompts/logic_drift_protocol_v23_used_for_dataset.md`.
 2. Repaired common JSON malformations (trailing commas, mixed quote styles, embedded code-fence markers).
 3. Extracted numeric score fields and free-text rationale fields into the columns of the cleaned CSV.
 
+The prompt constrained the response shape by requiring a fixed sequence of labeled JSON objects (`run_header`, `question_1` through `question_6`, and `summary`) and named score fields such as `S_C`, `S_L`, `S_D`, and `neutral_domain_score`. These labels were the deterministic anchors used by the extraction layer. The parser did not infer scores from free prose; numeric fields in the cleaned CSV were taken from the corresponding structured score fields after basic JSON repair.
+
 The parser code is **not included in this release.** Public release of the parser is on the v2 roadmap. Until then, the cleaned CSV should be treated as the canonical record of model outputs, and the parsing layer should be treated as a documented but unverified link in the reproducibility chain. Anyone wishing to reproduce the parsing step from raw model responses can request the extraction code directly (see paper §3.4 and §6).
 
 ## Determinism, replication, and the dz inflation note
