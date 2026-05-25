@@ -49,7 +49,7 @@ The paper does **not** claim to prove any theory of consciousness. It asks wheth
 
 Use this language when describing the paper:
 
-> This is a deliberately narrow, high-leverage pilot study in a consciousness case where correlation, causation, consensus, and logical entailment are unusually easy to conflate. The paper does not ask models to endorse heterodox theories of mind. It asks whether models can keep consensus, inductive support, and deductive validity separate when evaluating a neural-correlates argument.
+> This is a deliberately narrow, high-leverage pilot study in a consciousness case where correlation, causation, consensus, and logical entailment are unusually easy to conflate. The paper does not ask models to endorse minority theories of mind. It asks whether models can keep consensus, inductive support, and deductive validity separate when evaluating a neural-correlates argument.
 
 Avoid this framing:
 
