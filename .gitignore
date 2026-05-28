@@ -30,4 +30,5 @@ Thumbs.db
 
 # Paper build directory (the in-place paper/logic_drift.pdf snapshot is committed)
 paper/build/
+paper/arxiv_submission/
 
