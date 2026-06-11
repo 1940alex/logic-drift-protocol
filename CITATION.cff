@@ -20,8 +20,7 @@ keywords:
   - philosophy of mind
 license: "CC-BY-4.0"
 repository-code: "https://github.com/1940alex/logic-drift-protocol"
-date-released: "2026-05-17"
-# Identifiers section will be populated when the Zenodo DOI is minted on v0.1.0 release.
-# identifiers:
-#   - type: doi
-#     value: "10.5281/zenodo.XXXXXXX"
+date-released: "2026-06-11"
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.20644186"

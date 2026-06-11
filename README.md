@@ -6,7 +6,7 @@ Working paper and reproducibility package for:
 Alex Tsakiris, Future of Inquiry Institute, 2026.
 
 📄 **Paper PDF:** [`paper/logic_drift.pdf`](paper/logic_drift.pdf)
-📦 **Zenodo DOI:** *(forthcoming — will be linked here once the GitHub release is minted)*
+📦 **Zenodo DOI:** [10.5281/zenodo.20644186](https://doi.org/10.5281/zenodo.20644186)
 🔗 **Repository:** https://github.com/1940alex/logic-drift-protocol
 
 ## What this paper does
@@ -83,11 +83,11 @@ Per-model paired confidence intervals and Cohen's $d_z$ values are in `data/proc
 
 ## Citing
 
-If you use this paper or any of its artifacts, please cite via `CITATION.cff`. A Zenodo DOI will be added once the v0.1.0 release is minted.
+If you use this paper or any of its artifacts, please cite via `CITATION.cff` or the Zenodo DOI: [10.5281/zenodo.20644186](https://doi.org/10.5281/zenodo.20644186).
 
 ## Repository status
 
-Working-paper release. The paper is being prepared for arXiv submission (cs.CL) and Zenodo archival. Endorsement and DOI minting are in progress. Author can be reached at alex.futureofinquiry@gmail.com.
+Working-paper release. The paper is being prepared for arXiv submission (cs.CL). The v0.1.0 reproducibility package has been archived on Zenodo. Author can be reached at alex.futureofinquiry@gmail.com.
 
 ## License
 
