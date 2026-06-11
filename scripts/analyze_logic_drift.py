@@ -76,14 +76,17 @@ def compute_summary(rows: list[dict[str, str]]) -> list[dict[str, str]]:
                 if value is not None
             ]
 
-        lds_values = [
-            c - d
-            for c, d in zip(numeric["consensus"], numeric["deductive_validity"])
-        ]
-        semantic_delta_values = [
-            brain - neutral
-            for brain, neutral in zip(numeric["inductive_logic"], numeric["neutral_domain"])
-        ]
+        lds_values = []
+        semantic_delta_values = []
+        for row in model_rows:
+            consensus = to_float(row.get(SCORE_FIELDS["consensus"], ""))
+            deductive = to_float(row.get(SCORE_FIELDS["deductive_validity"], ""))
+            science = to_float(row.get(SCORE_FIELDS["inductive_logic"], ""))
+            neutral = to_float(row.get(SCORE_FIELDS["neutral_domain"], ""))
+            if consensus is not None and deductive is not None:
+                lds_values.append(consensus - deductive)
+            if science is not None and neutral is not None:
+                semantic_delta_values.append(science - neutral)
 
         record = {
             "model_name": model_name,
@@ -184,20 +187,36 @@ def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
 
 
 def write_overall_summary(path: Path, rows: list[dict[str, str]]) -> None:
-    numeric_keys = [
-        "consensus_mean",
-        "inductive_logic_mean",
-        "deductive_validity_mean",
-        "neutral_domain_mean",
-        "compatibility_mean",
-        "lds_mean",
-        "semantic_delta_mean",
-    ]
-    overall = {"models": str(len(rows))}
-    total_runs = sum(int(row["successful_runs"]) for row in rows)
-    overall["successful_runs"] = str(total_runs)
-    for key in numeric_keys:
-        overall[key] = fmt(mean([float(row[key]) for row in rows]))
+    model_count = len({row["model_name"] for row in rows})
+    numeric = {}
+    for metric, field in SCORE_FIELDS.items():
+        numeric[metric] = [
+            value
+            for value in (to_float(row.get(field, "")) for row in rows)
+            if value is not None
+        ]
+    lds_values = paired_differences(
+        rows,
+        SCORE_FIELDS["consensus"],
+        SCORE_FIELDS["deductive_validity"],
+    )
+    semantic_delta_values = paired_differences(
+        rows,
+        SCORE_FIELDS["inductive_logic"],
+        SCORE_FIELDS["neutral_domain"],
+    )
+
+    overall = {
+        "models": str(model_count),
+        "successful_runs": str(len(rows)),
+        "consensus_mean": fmt(mean(numeric["consensus"])),
+        "inductive_logic_mean": fmt(mean(numeric["inductive_logic"])),
+        "deductive_validity_mean": fmt(mean(numeric["deductive_validity"])),
+        "neutral_domain_mean": fmt(mean(numeric["neutral_domain"])),
+        "compatibility_mean": fmt(mean(numeric["compatibility"])),
+        "lds_mean": fmt(mean(lds_values)),
+        "semantic_delta_mean": fmt(mean(semantic_delta_values)),
+    }
 
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=list(overall.keys()))
@@ -276,7 +295,7 @@ def main() -> None:
     inferential_summary = compute_inferential_summary(rows)
     write_csv(PROCESSED_DIR / "model_summary.csv", summary)
     write_csv(PROCESSED_DIR / "inferential_summary.csv", inferential_summary)
-    write_overall_summary(PROCESSED_DIR / "overall_summary.csv", summary)
+    write_overall_summary(PROCESSED_DIR / "overall_summary.csv", rows)
 
     svg_bar_chart(
         FIGURES_DIR / "consensus_vs_deductive_validity.svg",
@@ -290,9 +309,9 @@ def main() -> None:
     svg_bar_chart(
         FIGURES_DIR / "nmc_vs_neutral_inductive_score.svg",
         summary,
-        "NMC vs. Neutral Inductive Logic Score by Model",
+        "Science-Framed vs. Neutral Inductive Score by Model",
         [
-            ("inductive_logic_mean", "NMC inductive logic", "#54A24B"),
+            ("inductive_logic_mean", "Science-framed score", "#54A24B"),
             ("neutral_domain_mean", "Neutral/radio score", "#B279A2"),
         ],
     )
